@@ -133,11 +133,23 @@ app.UseMiddleware<RequestLoggingMiddleware>();
                 function applyToken(token) {
                     const interval = setInterval(() => {
                         if (window.ui) {
-                            window.ui.preauthorizeApiKey('Bearer', token);
                             clearInterval(interval);
+                            // Use authActions.authorize - the reliable way to set auth
+                            window.ui.authActions.authorize({
+                                Bearer: {
+                                    name: 'Bearer',
+                                    schema: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+                                    value: token
+                                }
+                            });
                             updateBar(token);
                         }
-                    }, 200);
+                    }, 300);
+                }
+                function clearAuth() {
+                    if (window.ui) {
+                        window.ui.authActions.logout(['Bearer']);
+                    }
                 }
                 function parseJwt(token) {
                     try { return JSON.parse(atob(token.split('.')[1])); } catch { return null; }
@@ -153,7 +165,7 @@ app.UseMiddleware<RequestLoggingMiddleware>();
                         statusEl.innerHTML = 'Signed in as <span class="active">' + email + '</span> (' + role + ') &mdash; <a href="/" id="ht-switch">switch role</a> &middot; <a href="javascript:void(0)" id="ht-logout">sign out</a>';
                         document.getElementById('ht-logout').onclick = function() {
                             localStorage.removeItem('healthtrack_token');
-                            window.ui.preauthorizeApiKey('Bearer', '');
+                            clearAuth();
                             updateBar(null);
                         };
                     } else {
