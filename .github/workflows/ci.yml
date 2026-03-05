@@ -48,4 +48,4 @@ jobs:
         run: docker build -t healthtrack-api .
 
       - name: Verify Docker image
-        run: docker image inspect healthtrack-api --format '${{ '{{' }}.Size}}' | awk '{printf "Image size: %.1f MB\n", $1/1048576}'
+        run: docker images healthtrack-api
