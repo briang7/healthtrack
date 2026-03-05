@@ -1,3 +1,4 @@
+using HealthTrack.Domain.Attributes;
 using HealthTrack.Domain.Enums;
 
 namespace HealthTrack.Domain.Entities;
@@ -8,9 +9,17 @@ public class ClinicalNote : BaseEntity
     public Guid ProviderId { get; set; }
     public Guid? AppointmentId { get; set; }
     public NoteType NoteType { get; set; }
+
+    [Phi(PhiSensitivity.HighlySensitive, Category = "Clinical")]
     public string? Subjective { get; set; }
+
+    [Phi(PhiSensitivity.HighlySensitive, Category = "Clinical")]
     public string? Objective { get; set; }
+
+    [Phi(PhiSensitivity.HighlySensitive, Category = "Clinical")]
     public string? Assessment { get; set; }
+
+    [Phi(PhiSensitivity.HighlySensitive, Category = "Clinical")]
     public string? Plan { get; set; }
     public int Version { get; set; } = 1;
     public bool IsAmended { get; set; }

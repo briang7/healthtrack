@@ -1,3 +1,4 @@
+using System.Threading.RateLimiting;
 using HealthTrack.Api.Middleware;
 using HealthTrack.Api.Services;
 using HealthTrack.Application;
@@ -5,6 +6,7 @@ using HealthTrack.Infrastructure;
 using HealthTrack.Infrastructure.Identity;
 using HealthTrack.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -102,6 +104,24 @@ var healthChecks = builder.Services.AddHealthChecks()
 var redisConn = builder.Configuration.GetConnectionString("Redis");
 if (!string.IsNullOrEmpty(redisConn))
     healthChecks.AddRedis(redisConn, name: "redis");
+
+// Rate limiting
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.PermitLimit = 60;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+    options.AddFixedWindowLimiter("auth", opt =>
+    {
+        opt.PermitLimit = 10;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+});
 
 var app = builder.Build();
 
@@ -376,9 +396,10 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 }
 
 app.UseCors("AllowAll");
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+app.MapControllers().RequireRateLimiting("fixed");
 app.MapHealthChecks("/health");
 
 // Auto-migrate and seed (all environments for portfolio demo)

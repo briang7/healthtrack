@@ -1,3 +1,4 @@
+using HealthTrack.Domain.Attributes;
 using HealthTrack.Domain.Enums;
 
 namespace HealthTrack.Domain.Entities;
@@ -10,7 +11,11 @@ public class Appointment : BaseEntity
     public TimeSpan Duration { get; set; }
     public AppointmentStatus Status { get; set; } = AppointmentStatus.Scheduled;
     public AppointmentType Type { get; set; }
+
+    [Phi(PhiSensitivity.Sensitive, Category = "Clinical")]
     public string? Notes { get; set; }
+
+    [Phi(PhiSensitivity.Standard, Category = "Clinical")]
     public string? CancellationReason { get; set; }
     public bool IsRecurring { get; set; }
     public string? RecurrencePattern { get; set; }

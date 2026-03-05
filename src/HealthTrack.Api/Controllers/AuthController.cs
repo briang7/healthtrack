@@ -5,11 +5,13 @@ using HealthTrack.Application.Features.Auth.Commands.Login;
 using HealthTrack.Application.Features.Auth.Commands.RefreshToken;
 using HealthTrack.Application.Features.Auth.Commands.Register;
 using HealthTrack.Application.Features.Auth.DTOs;
+using Microsoft.AspNetCore.RateLimiting;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/v1/auth")]
+[EnableRateLimiting("auth")]
 public class AuthController : ControllerBase
 {
     private readonly ISender _sender;

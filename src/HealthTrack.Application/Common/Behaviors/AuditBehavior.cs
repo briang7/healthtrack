@@ -1,7 +1,7 @@
-using System.Text.Json;
 using HealthTrack.Application.Common.Interfaces;
 using HealthTrack.Domain.Entities;
 using HealthTrack.Domain.Interfaces;
+using HealthTrack.Domain.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -34,7 +34,7 @@ public sealed class AuditBehavior<TRequest, TResponse>(
                 Action = requestName,
                 EntityType = requestName.Replace("Command", string.Empty),
                 EntityId = ExtractEntityId(request),
-                NewValues = JsonSerializer.Serialize(request),
+                NewValues = PhiMaskingService.MaskJson(request),
                 Timestamp = DateTime.UtcNow
             };
 

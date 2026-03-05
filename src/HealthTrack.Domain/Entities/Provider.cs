@@ -1,14 +1,25 @@
+using HealthTrack.Domain.Attributes;
 using HealthTrack.Domain.ValueObjects;
 
 namespace HealthTrack.Domain.Entities;
 
 public class Provider : BaseEntity
 {
+    [Phi(PhiSensitivity.Standard, Category = "Demographics")]
     public required string FirstName { get; set; }
+
+    [Phi(PhiSensitivity.Standard, Category = "Demographics")]
     public required string LastName { get; set; }
+
     public required string Specialty { get; set; }
+
+    [Phi(PhiSensitivity.Standard, Category = "Professional")]
     public required string LicenseNumber { get; set; }
+
+    [Phi(PhiSensitivity.Standard, Category = "Contact")]
     public required string Email { get; set; }
+
+    [Phi(PhiSensitivity.Standard, Category = "Contact")]
     public required PhoneNumber Phone { get; set; }
     public bool IsAcceptingPatients { get; set; } = true;
 
