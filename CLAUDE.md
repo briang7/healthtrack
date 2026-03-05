@@ -8,7 +8,7 @@ HIPAA-aware Patient Portal REST API using ASP.NET Core 9 with Clean Architecture
 
 ```bash
 dotnet build                                    # Build all projects
-dotnet run --project src/HealthTrack.Api         # Run the API (https://localhost:5001)
+dotnet run --project src/HealthTrack.Api         # Run the API (https://localhost:5301)
 dotnet test                                      # Run all tests
 docker compose up -d                             # Start PostgreSQL + Redis
 docker compose down                              # Stop containers
@@ -16,9 +16,9 @@ docker compose down                              # Stop containers
 
 ## Ports
 
-- API: https://localhost:5001, http://localhost:5000
-- PostgreSQL: localhost:5433 (user: healthtrack, pass: healthtrack_dev, db: healthtrack_dev)
-- Redis: localhost:6380
+- API: https://localhost:5301, http://localhost:5300
+- PostgreSQL: localhost:5434 (user: healthtrack, pass: healthtrack_dev, db: healthtrack_dev)
+- Redis: localhost:6381
 
 ## Architecture
 

@@ -1,0 +1,30 @@
+databases:
+  - name: healthtrack-db
+    plan: free
+    databaseName: healthtrack
+    user: healthtrack
+
+services:
+  - type: web
+    name: healthtrack-api
+    plan: free
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: healthtrack-db
+          property: connectionString
+      - key: JwtSettings__Secret
+        generateValue: true
+      - key: JwtSettings__Issuer
+        value: HealthTrack
+      - key: JwtSettings__Audience
+        value: HealthTrackUsers
+      - key: JwtSettings__ExpiryMinutes
+        value: "60"
+      - key: JwtSettings__RefreshTokenExpiryDays
+        value: "7"
+    healthCheckPath: /health

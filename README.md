@@ -49,7 +49,7 @@ tests/
 docker compose up -d
 ```
 
-This starts PostgreSQL (port 5433) and Redis (port 6380).
+This starts PostgreSQL (port 5434) and Redis (port 6381).
 
 ### 2. Run the API
 
@@ -57,11 +57,11 @@ This starts PostgreSQL (port 5433) and Redis (port 6380).
 dotnet run --project src/HealthTrack.Api
 ```
 
-The API starts at **https://localhost:5001** with Swagger UI.
+The API starts at **https://localhost:5301** with Swagger UI.
 
 ### 3. Open Swagger
 
-Navigate to https://localhost:5001/swagger to explore all endpoints.
+Navigate to https://localhost:5301/swagger to explore all endpoints.
 
 ## Demo Accounts
 
@@ -165,10 +165,10 @@ dotnet ef database update --project src/HealthTrack.Infrastructure --startup-pro
 
 | Service | Port |
 |---------|------|
-| API (HTTPS) | 5001 |
-| API (HTTP) | 5000 |
-| PostgreSQL | 5433 |
-| Redis | 6380 |
+| API (HTTPS) | 5301 |
+| API (HTTP) | 5300 |
+| PostgreSQL | 5434 |
+| Redis | 6381 |
 
 ## Seed Data
 

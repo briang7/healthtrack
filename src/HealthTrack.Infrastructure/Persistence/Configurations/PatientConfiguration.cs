@@ -2,6 +2,7 @@ using System.Text.Json;
 using HealthTrack.Domain.Entities;
 using HealthTrack.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HealthTrack.Infrastructure.Persistence.Configurations;
@@ -33,17 +34,24 @@ public class PatientConfiguration : IEntityTypeConfiguration<Patient>
         builder.Property(p => p.MedicalHistory)
             .HasMaxLength(4000);
 
+        var stringListComparer = new ValueComparer<List<string>>(
+            (c1, c2) => c1!.SequenceEqual(c2!),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+            c => c.ToList());
+
         builder.Property(p => p.Allergies)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
                 v => JsonSerializer.Deserialize<List<string>>(v, JsonSerializerOptions.Default) ?? new List<string>())
-            .HasColumnType("jsonb");
+            .HasColumnType("jsonb")
+            .Metadata.SetValueComparer(stringListComparer);
 
         builder.Property(p => p.Medications)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
                 v => JsonSerializer.Deserialize<List<string>>(v, JsonSerializerOptions.Default) ?? new List<string>())
-            .HasColumnType("jsonb");
+            .HasColumnType("jsonb")
+            .Metadata.SetValueComparer(stringListComparer);
 
         builder.OwnsOne(p => p.DateOfBirth, dob =>
         {
