@@ -27,4 +27,4 @@ services:
         value: "60"
       - key: JwtSettings__RefreshTokenExpiryDays
         value: "7"
-    healthCheckPath: /health
+    healthCheckPath: /api/v1/health
